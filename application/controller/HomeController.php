@@ -7,7 +7,7 @@ use \application\controller\BaseController;
 
 class HomeController extends BaseController {
 
-	protected function before() {
+	public function before() {
 		parent::before();
 		return true;
 	}

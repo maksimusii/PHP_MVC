@@ -33,4 +33,28 @@ class UserModel extends BaseModel {
 
 		return true;
 	}
+
+	public function getUserByLogin($login) {
+		$statement = self::$connection->prepare("SELECT * FROM user WHERE login = :login");
+		$statement->bindValue(':login', $login, \PDO::PARAM_STR);
+		$statement->execute();
+
+		return $statement->fetch(\PDO::FETCH_ASSOC);
+	}	
+
+	public function getHisoryPagesName() {
+		$statement = self::$connection->prepare("SELECT * FROM history_pages");
+		$statement->execute();
+
+		return $statement->fetchAll(\PDO::FETCH_ASSOC);
+	}	
+
+	public function setPageName() {
+		$name = $_SERVER['HTTP_HOST'].$_SERVER['REQUEST_URI'];
+		$statement = self::$connection->prepare("INSERT INTO history_pages (name) VALUES (:name)");
+		$statement->bindValue(':name', $name, \PDO::PARAM_STR);
+		$statement->execute();
+
+		return true;
+	}
 }

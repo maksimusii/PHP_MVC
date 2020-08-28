@@ -62,4 +62,12 @@ class UserController extends BaseController {
 		]);
 	}	
 
+	public function action_account() {
+		$userModel = new UserModel();
+		$history_pages = array_slice(($userModel->getHisoryPagesName()), -5);
+		return $this->view->render("user/account", [
+			"history_pages" => $history_pages
+		]);
+	}
+
 }
