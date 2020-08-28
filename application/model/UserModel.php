@@ -43,7 +43,9 @@ class UserModel extends BaseModel {
 	}	
 
 	public function getHisoryPagesName() {
-		$statement = self::$connection->prepare("SELECT * FROM history_pages");
+		$user_id = (int)$_SESSION["user"]["id"];
+		$statement = self::$connection->prepare("SELECT * FROM history_pages WHERE user_id = :user_id");
+		$statement->bindValue(':user_id', $user_id, \PDO::PARAM_INT);
 		$statement->execute();
 
 		return $statement->fetchAll(\PDO::FETCH_ASSOC);
@@ -51,7 +53,9 @@ class UserModel extends BaseModel {
 
 	public function setPageName() {
 		$name = $_SERVER['HTTP_HOST'].$_SERVER['REQUEST_URI'];
-		$statement = self::$connection->prepare("INSERT INTO history_pages (name) VALUES (:name)");
+		$user_id = (int)$_SESSION["user"]["id"];
+		$statement = self::$connection->prepare("INSERT INTO history_pages (name, user_id) VALUES (:name, :user_id)");
+		$statement->bindValue(':user_id', $user_id, \PDO::PARAM_INT);
 		$statement->bindValue(':name', $name, \PDO::PARAM_STR);
 		$statement->execute();
 
