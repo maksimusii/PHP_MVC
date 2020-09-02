@@ -1,0 +1,60 @@
+{% include 'templates/header.tmpl' %}
+ <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+<script>
+	$(document).ready(function() {
+		$('.change_status').change(function(){
+        var id_order_status = $(this).context.selectedOptions[0].id.substr(10);
+        var id_order = $(this).context.parentElement.id;
+				
+        $.ajax({
+            url: "?path=admin/changeStatus",
+            type: "POST",
+            data:{
+                id_order_status: id_order_status,
+                id_order: id_order
+            },
+            error: function() {alert("Что-то пошло не так...");},
+            success: function(answer){
+                if(answer.result == '1')
+										$('#order_status_' + id_order)[0].innerText = answer.order_status;
+                else
+                    alert("Что-то пошло не так...");
+            },
+            dataType : "json"
+        })
+    });
+	});
+</script>
+
+<div class="container">
+	<h4>Orders</h4>
+	<table class="table table-striped text-left">
+		<tr>
+			<th>Id</th>
+			<th>User</th>
+			<th>Good</th>
+			<th>Amount</th>
+			<th>Curent status</th>
+			<th>Controll</th>
+		</tr>
+		{% for item in items %}
+		<tr>
+			<td>{{item.id}}</td>
+			<td>{{item.login}}</td>
+			<td>{{item.name}}</td>
+			<td>{{item.amount}}</td>
+			<td id="order_status_{{item.id}}">{{item.order_status_name}}</td>
+			<td id="{{item.id}}">
+				<select class="change_status" name="operation">
+					<option value="">-- Изменить статус заказа --</option>
+					<option id='status_id_2'>Принят</option>
+					<option id='status_id_3'>Выполнен</option>
+					<option id='status_id_4'>Отменён</option>
+				</select>
+			</td>
+		</tr>
+		{% endfor %}
+	</table>
+</div>
+
+{% include 'templates/footer.tmpl' %}

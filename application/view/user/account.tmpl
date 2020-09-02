@@ -1,0 +1,16 @@
+{% include 'templates/header.tmpl' %}
+
+<div class="container">
+	<h4>Personal account</h4>
+  <h2>Вы недавно смотрели</h2>
+  
+		<table class="table table-striped">
+    {% for history_page in history_pages %}
+			<tr>
+        <td>{{history_page.name}}</td>
+			</tr>
+    {% endfor %}
+		</table>
+</div>
+
+{% include 'templates/footer.tmpl' %}
